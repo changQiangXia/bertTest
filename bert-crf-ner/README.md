@@ -187,6 +187,10 @@ CRF（条件随机场）层在序列标注中的核心作用：
 4. **编码问题**：Windows UTF-8编码设置，避免中文乱码
 5. **显存优化**：FP16混合精度 + 层冻结 + 梯度累积
 
+## 备注
+1. **平台**：建议使用powershell，而不是cmd
+2. **完整运行的指令示例**：确认当前路径（../bert-crf-ner）后：cd bert-crf-ner; conda activate {correct env}; $env:HF_ENDPOINT="https://hf-mirror.com"; python src/train.py --model_name bert-base-chinese --batch_size 8 --gradient_accumulation_steps 2 --num_epochs 5 --learning_rate 5e-5 --crf_learning_rate 5e-3 --max_seq_length 64 --fp16 --freeze_bert_layers 10 --weight_decay 0.0 --warmup_ratio 0.1 --logging_steps 50 --output_dir outputs --num_workers 0 2>&1，其中correct env为正确的环境，并注意关注torch、transformer等库的版本。
+
 ## 参考
 
 - [Hugging Face Transformers](https://huggingface.co/transformers/)

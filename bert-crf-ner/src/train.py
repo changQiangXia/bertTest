@@ -32,6 +32,10 @@ import io
 
 # 设置UTF-8编码 (Windows兼容)
 if sys.platform == 'win32':
+    import ctypes
+    # 设置Windows控制台为UTF-8模式
+    ctypes.windll.kernel32.SetConsoleCP(65001)
+    ctypes.windll.kernel32.SetConsoleOutputCP(65001)
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
@@ -270,7 +274,9 @@ def train(args):
     for epoch in range(args.num_epochs):
         model.train()
         epoch_loss = 0
-        progress_bar = tqdm(train_loader, desc=f"Epoch {epoch+1}/{args.num_epochs}")
+        progress_bar = tqdm(train_loader, desc=f"Epoch {epoch+1}/{args.num_epochs}", 
+                        bar_format='{desc}: {percentage:3.0f}%|{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}]',
+                        ncols=100, ascii=' =')
         
         for step, batch in enumerate(progress_bar):
             # 将数据移到设备
